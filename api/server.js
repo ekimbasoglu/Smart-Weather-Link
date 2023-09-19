@@ -52,16 +52,19 @@ io.on("connection", (socket) => {
                 dataFromArduino.temperature = data.replace("Temperature: ", "");
                 break;
             case data.startsWith("Soil is dr"):
-                dataFromArduino.humidtyOnPlant = data.replace("Humidity on plant: ", "");
+                dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
                 break;
             case data.startsWith("Soil is we"):
-                dataFromArduino.humidtyOnPlant = data.replace("Humidity on plant: ", "");
+                dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
                 break;
             default:
                 break;
         }
 
-        io.emit("data", dataFromArduino);
+        socket.emit("temperature", dataFromArduino.temperature);
+        socket.emit("humidtyIndoor", dataFromArduino.humidtyIndoor);
+        socket.emit("humidtyPlant", dataFromArduino.humidtyPlant);
+        socket.emit("allData", dataFromArduino);
         console.log(dataFromArduino);
     });
 
