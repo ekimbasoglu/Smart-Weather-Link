@@ -19,12 +19,11 @@ export class AuthGuard {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (!this.authService.isLoggedIn()) {
-      console.log('if works!');
-      this.router.navigate(['/login']);
+    const authToken = localStorage.getItem('authToken');
+    if (authToken && authToken.startsWith('true')) {
+      return true;
+    } else {
+      return this.router.navigate(['/']);
     }
-
-    // logged in, so return true
-    return this.authService.isLoggedIn();
   }
 }
