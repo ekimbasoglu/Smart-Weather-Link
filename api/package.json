@@ -1,12 +1,18 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@serialport/list": "^12.0.0",
+    "johnny-five": "^2.1.0",
+    "node-dweetio": "^0.0.11",
+    "serialport": "^12.0.0"
+  },
+  "description": ""
 }
