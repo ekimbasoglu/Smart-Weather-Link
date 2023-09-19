@@ -37,7 +37,7 @@ void measureHumidtyDigital(){
     Serial.println("Soil is wet");
   }
 
-  delay(1000); // Delay for 1 second before taking another reading
+  delay(2000); // Delay for 1 second before taking another reading
 }
 
 void checkTemperatureAirHumidity(){
@@ -48,8 +48,8 @@ void checkTemperatureAirHumidity(){
     Serial.println("Failed to read from DHT sensor!");
   } else {
     Serial.print("Humidity on Air (%): ");
-    Serial.print(humidity);
-    Serial.print("\tTemperature (°C): ");
+    Serial.println(humidity);
+    Serial.print("Temperature (°C): ");
     Serial.println(temperatureCelsius);
   }
 }
