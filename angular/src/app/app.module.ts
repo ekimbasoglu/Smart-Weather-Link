@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,13 @@ import { NavbarComponent } from './navbar/navbar.component';
     DashboardComponent,
     NavbarComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    CanvasJSAngularChartsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
