@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
+import { SocketService } from '../services/socketService';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,8 +8,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  // example for only one socket
+  receivedData: string = '';
+
+  //
+  // Data
+  temperature: string = '';
+  humidtyIndoor: string = '';
+  humidtyPlant: string = '';
+  allData: any[] = [];
+
+  constructor(private socket: Socket, private socketService: SocketService) {}
+
   ngOnInit(): void {
-    // TODO
+    // this.socketService.data$.subscribe((data) => {
+    //   this.receivedData = data;
+    // });
+    this.socketService.getData();
   }
 
   chart: any;
@@ -21,21 +38,21 @@ export class DashboardComponent implements OnInit {
     },
     axisY: {
       labelFormatter: (e: any) => {
-        var suffixes = ['', 'K', 'M', 'B', 'T'];
+        var suffixes = ['', '', 'M', 'B', 'T'];
 
-        var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
+        var order = Math.max(Math.floor(Math.log(e.value) / Math.log(10)), 0);
         if (order > suffixes.length - 1) order = suffixes.length - 1;
 
         var suffix = suffixes[order];
-        return '$' + e.value / Math.pow(1000, order) + suffix;
+        return e.value / Math.pow(1, order) + suffix + '°C';
       },
     },
     data: [
       {
         type: 'line',
-        xValueFormatString: 'YYYY',
-        yValueFormatString: '$#,###.##',
-        dataPoints: [{ x: 1, y: 2 }], // X generate time, y data temperature indoors
+        xValueFormatString: 'HHMMSS',
+        yValueFormatString: '##.##°C',
+        dataPoints: [{ x: '14:22:10', y: 23.41 }], // X generate time, y data temperature indoors
       },
     ],
   };

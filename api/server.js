@@ -2,9 +2,18 @@ const SerialPort = require("serialport").SerialPort;
 const Readline = require("@serialport/parser-readline");
 const { ReadlineParser } = require('@serialport/parser-readline')
 const express = require("express");
+const http = require('http');
+const socketIo = require('socket.io');
 const cors = require('cors');
 const app = express();
-const io = require('socket.io')(3001);
+const server = http.createServer(app);
+
+// Socket settings for CORS
+const io = socketIo(server, {
+    cors: {
+        origin: '*',
+    }
+});
 
 // Socket connection
 io.on('connection', (socket) => {
@@ -16,7 +25,7 @@ io.on('connection', (socket) => {
 
 // Define the serial port settings
 const serialPort = new SerialPort({
-    path: "/dev/cu.usbserial-110",
+    path: "/dev/cu.usbserial-10",
     baudRate: 9600, // Adjust to match your Arduino's baud rate
 });
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }))
@@ -33,8 +42,17 @@ let dataFromArduino = {
     humidtyPlant: ''
 };
 
+// Configure CORS to allow requests from 'http://localhost:4200'
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+
 // Cors
-app.use(cors());
+app.use(cors(corsOptions)); // Use the 'cors' middleware with the specified options
+
 
 // Socket.io event handling
 io.on("connection", (socket) => {
@@ -46,16 +64,20 @@ io.on("connection", (socket) => {
         // Generate a switch that if the data starts with certain text then it will be assigned to a variable
         switch (true) {
             case data.startsWith("Humidity on Air"):
-                dataFromArduino.humidtyIndoor = data.replace("Humidity on Air: ", "");
+                // dataFromArduino.humidtyIndoor = data.replace("Humidity on Air: ", "");
+                dataFromArduino.humidtyIndoor = data.substr(data.length - 5); // Represents for % 
                 break;
             case data.startsWith("Temperature"):
-                dataFromArduino.temperature = data.replace("Temperature: ", "");
+                // dataFromArduino.temperature = data.replace("Temperature: ", ""); // This is for the whole data incoming from Arduino
+                dataFromArduino.temperature = data.substr(data.length - 5); // Rerepsents for C
                 break;
             case data.startsWith("Soil is dr"):
-                dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
+                // dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
+                dataFromArduino.humidtyPlant = data.substr(data.length - 3); // Only the dry part
                 break;
             case data.startsWith("Soil is we"):
-                dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
+                // dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
+                dataFromArduino.humidtyPlant = data.substr(data.length - 3); // Only the wet part
                 break;
             default:
                 break;
@@ -75,7 +97,7 @@ io.on("connection", (socket) => {
 });
 
 // Start the HTTP server
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log(`Server is running on port 3000`);
 });
 
