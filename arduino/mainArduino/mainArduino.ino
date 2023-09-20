@@ -37,11 +37,9 @@ void measureHumidtyDigital(){
     Serial.println("Soil is wet");
   }
 
-  delay(2000); // Delay for 1 second before taking another reading
 }
 
 void checkTemperatureAirHumidity(){
-  delay(2000);  // Wait for a few seconds between readings
   float humidity = dht.readHumidity();     // Read humidity (in percentage)
   float temperatureCelsius = dht.readTemperature();  // Read temperature in Celsius
   if (isnan(humidity) || isnan(temperatureCelsius)) {
@@ -56,6 +54,8 @@ void checkTemperatureAirHumidity(){
 void loop() {
   // put your main code here, to run repeatedly:
   // measureHumidtyAnalog(); // A0
+  delay(1000);
   measureHumidtyDigital();
   checkTemperatureAirHumidity();
+  delay(6500); // 6.5sec delay for readings to not spam
 }
