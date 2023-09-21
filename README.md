@@ -1,6 +1,8 @@
 # Smart-Weather-Link
 
-IoT project works with Arduino Uno, reciving the data with NodeJs through sockets, displaying on Angular!
+IoT project works with Arduino Uno, receiving the data with NodeJs through sockets, displaying on Angular!
+
+It detects temperature and humidity indoors and checks your plant's moisture, you can run a servo to water the plant. It can detect rain with the sensor.
 
 ## Which sensors are used?
 
@@ -45,4 +47,4 @@ Picture from v1: 😄
 
 `If you need help with connecting the sensors to the breadboard, you can use circuito.io visually adding the sensors`
 
-### Ekim Basoglu
+### [Ekim Basoglu](https://www.ekimbasoglu.com)
