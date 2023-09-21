@@ -1,8 +1,11 @@
 
 #include <DHT.h>
+#include <Servo.h>
 
-const int humiditySensorPin = A0;
-const int sensorPin = 7; // Change this to your actual digital pin number
+Servo servo;
+int servoPosition = 90;  // Initial servo position (90 degrees)
+const int rainSensorPin = 12;  //  FC-37 rain sensor's digital output
+const int sensorPin = 7; // Soil Humidity sensor input
 
 #define DHT_TYPE DHT11   // DHT11 sensor type
 #define DHT_PIN 8        // Pin where the sensor is connected
@@ -10,23 +13,13 @@ DHT dht(DHT_PIN, DHT_TYPE);
 
 void setup() {
   Serial.begin(9600); // Init serial
-  dht.begin();
-  pinMode(sensorPin, INPUT); // Set the sensor pin as an input
+  dht.begin(); // Temp/ Humidity sensor
+  pinMode(sensorPin, INPUT); // Humidty sensor
+  pinMode(rainSensorPin, INPUT);  // Rain sensor
+  servo.attach(2);  // Attach the servo to pin 2
+  servo.write(servoPosition);  // Set the initial position
 }
 
-void measureHumidtyAnalog(){
-
-  int sensorValue = analogRead(humiditySensorPin);
-
-  // Convert the analog reading to a percentage humidity value
-  float humidityPercentage = map(sensorValue, 0, 1023, 0, 100); // Assuming a 0-100% range
-
-  // Print the humidity value to the serial monitor
-  Serial.print("Humidity on the plant (%): ");
-  Serial.println(humidityPercentage);
-
-  delay(1000); // Delay for 1 second before taking another reading
-}
 void measureHumidtyDigital(){
   // Read the digital value from the sensor (HIGH or LOW)
   int sensorValue = digitalRead(sensorPin);
@@ -51,11 +44,45 @@ void checkTemperatureAirHumidity(){
     Serial.println(temperatureCelsius);
   }
 }
+
+void checkRainSensor(){
+    int rainSensorValue = digitalRead(rainSensorPin);  // Read the digital signal from the sensor
+  
+  if (rainSensorValue == HIGH) {
+    Serial.println("rain");  // Print a message when rain is detected
+  } else {
+    Serial.println("no rain");  // Print a message when no rain is detected
+  }
+}
+
+void checkServo(){
+  if (Serial.available() > 0) {
+    char command = Serial.read();
+    
+    // Move the servo based on user input
+    if (command == 'L') {  // 'L' for left
+      servoPosition -= 10;
+      if (servoPosition < 0) {
+        servoPosition = 0;
+      }
+    } else if (command == 'R') {  // 'R' for right
+      servoPosition += 10;
+      if (servoPosition > 180) {
+        servoPosition = 180;
+      }
+    }
+    
+    // Update the servo position
+    servo.write(servoPosition);
+  }
+}
+
 void loop() {
-  // put your main code here, to run repeatedly:
-  // measureHumidtyAnalog(); // A0
+
   delay(1000);
   measureHumidtyDigital();
   checkTemperatureAirHumidity();
+  checkRainSensor();
   delay(6500); // 6.5sec delay for readings to not spam
+  checkServo();
 }

@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
 
 // Define the serial port settings
 const serialPort = new SerialPort({
-    path: "/dev/cu.usbserial-10",
+    path: "/dev/cu.usbserial-110",
     baudRate: 9600, // Adjust to match your Arduino's baud rate
 });
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }))
@@ -39,7 +39,8 @@ serialPort.on('error', function (err) {
 let dataFromArduino = {
     temperature: '',
     humidtyIndoor: '',
-    humidtyPlant: ''
+    humidtyPlant: '',
+    rainStatus: '',
 };
 
 // Configure CORS to allow requests from 'http://localhost:4200'
@@ -79,15 +80,26 @@ io.on("connection", (socket) => {
                 // dataFromArduino.humidtyPlant = data.replace("Humidity on plant: ", "");
                 dataFromArduino.humidtyPlant = data.substr(data.length - 3); // Only the wet part
                 break;
+            case data.startsWith("rai"):
+                dataFromArduino.rainStatus = data.replace("rain: ", "");
+                break;
+            case data.startsWith("no ra"):
+                dataFromArduino.rainStatus = data.replace("rain: ", "");
+                break;
             default:
                 break;
         }
-
         socket.emit("temperature", dataFromArduino.temperature);
         socket.emit("humidtyIndoor", dataFromArduino.humidtyIndoor);
         socket.emit("humidtyPlant", dataFromArduino.humidtyPlant);
-        socket.emit("allData", dataFromArduino);
+        socket.emit("rainStatus", dataFromArduino.rainStatus);
         console.log(dataFromArduino);
+    });
+
+    // generate input for socketio to send data to arduino, string "R" is for servo motor
+    socket.on("servo", (data) => {
+        console.log(data);
+        serialPort.write('R');
     });
 
     // Handle disconnect event
