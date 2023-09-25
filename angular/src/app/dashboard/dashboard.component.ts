@@ -23,11 +23,7 @@ export class DashboardComponent implements OnInit {
 
   chartData: { x: Date; y: number }[] = [];
 
-  constructor(private socket: Socket, public socketService: SocketService) {
-    // setInterval(() => {
-    //   this.receivedData = this.socketService.data$;
-    // }, 1000);
-  }
+  constructor(private socket: Socket, public socketService: SocketService) {}
 
   runServo() {
     this.socket.emit('servo');
