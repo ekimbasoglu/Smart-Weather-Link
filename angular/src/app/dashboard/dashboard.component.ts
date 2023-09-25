@@ -131,10 +131,6 @@ export class DashboardComponent implements OnInit {
 
         // Update the chart
         this.chart.render();
-        // make delay for 3 seconds
-        // setTimeout(() => {
-        //   this.chart.render();
-        // }, 3000);
 
         // this.insertData(data.temperature);
       }
