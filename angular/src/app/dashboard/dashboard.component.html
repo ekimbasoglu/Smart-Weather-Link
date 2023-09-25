@@ -1,12 +1,12 @@
-<app-navbar></app-navbar>
+<app-navbar [ngClass]="connectionLost ? 'opacity-40' : ''" ></app-navbar>
+<!-- Connection lost-->
+<div *ngIf="connectionLost" class="flex items-center justify-center">
+  <app-connection-lost></app-connection-lost>
+</div>
 
-<div class="container">
+
+<div [ngClass]="connectionLost ? 'opacity-40' : ''" class="container">
   <div class="col-md-6">
-    <!-- Connection lost-->
-    <div *ngIf="connectionLost" class="ml-40 flex">
-      <app-connection-lost></app-connection-lost>
-    </div>
-
     <div>
       <h2 class="mt-10 ml-52 items-center">TODO: Temperature charts data is currently static, but the sockets are working</h2>
     <!-- <canvasjs-chart [options]="chartOptions" class="mt-12 ml-32 flex items-center justify-center" [styles]="{width: '75%', height:'360px'}"></canvasjs-chart> -->
