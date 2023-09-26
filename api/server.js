@@ -25,12 +25,12 @@ io.on('connection', (socket) => {
 
 // Define the serial port settings
 const serialPort = new SerialPort({
-    path: "/dev/cu.usbserial-110",
-    baudRate: 9600, // Adjust to match your Arduino's baud rate
+    path: "/dev/cu.usbserial-10",
+    baudRate: 9600,
 });
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }))
 
-// Open errors will be emitted as an error event
+// Error event
 serialPort.on('error', function (err) {
     console.log('Error: ', err.message)
 })
@@ -59,10 +59,7 @@ app.use(cors(corsOptions)); // Use the 'cors' middleware with the specified opti
 io.on("connection", (socket) => {
     console.log("A user connected");
 
-    // Send initial data to the connected client
-    // Read data from the serial port
     parser.on("data", (data) => {
-        // Generate a switch that if the data starts with certain text then it will be assigned to a variable
         switch (true) {
             case data.startsWith("Humidity on Air"):
                 // dataFromArduino.humidtyIndoor = data.replace("Humidity on Air: ", "");
@@ -96,13 +93,11 @@ io.on("connection", (socket) => {
         console.log(dataFromArduino);
     });
 
-    // generate input for socketio to send data to arduino, string "R" is for servo motor
     socket.on("servo", (data) => {
         console.log(data);
         serialPort.write('R');
     });
 
-    // Handle disconnect event
     socket.on("disconnect", () => {
         console.log("A user disconnected");
     });
@@ -112,10 +107,3 @@ io.on("connection", (socket) => {
 server.listen(3000, () => {
     console.log(`Server is running on port 3000`);
 });
-
-// port.write('main screen turn on', function (err) {
-//     if (err) {
-//         return console.log('Error on write: ', err.message)
-//     }
-//     console.log('message written')
-// })

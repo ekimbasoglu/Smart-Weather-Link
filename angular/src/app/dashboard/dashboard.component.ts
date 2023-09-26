@@ -61,7 +61,6 @@ export class DashboardComponent implements OnInit {
           yValueFormatString: '##.##°C',
           // dataPoints: this.chartData, // TODO
           dataPoints: [
-            // Data below is structure how its needs to be added
             {
               x: new Date('2023-09-20 15:05'),
               y: 25.0,
@@ -127,16 +126,7 @@ export class DashboardComponent implements OnInit {
 
         // Update the chart
         this.chart.render();
-
-        // this.insertData(data.temperature);
       }
-    });
-  }
-
-  insertData(temperature: string): void {
-    this.chartOptions.data[0].dataPoints.push({
-      x: new Date(),
-      y: Number(temperature),
     });
   }
 
