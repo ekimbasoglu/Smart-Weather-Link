@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { ConnectionLostComponent } from './connection-lost/connection-lost.component';
+import { MockDashboardComponent } from './mock-dashboard/mock-dashboard.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -21,6 +22,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     DashboardComponent,
     NavbarComponent,
     ConnectionLostComponent,
+    MockDashboardComponent,
   ],
   imports: [
     BrowserModule,

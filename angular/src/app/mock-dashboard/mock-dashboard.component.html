@@ -1,0 +1,22 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="col-md-6">
+    <div id="chartContainer" class="mt-10 ml-52 items-center" style="height: 320px; width: 75%;"></div>
+  </div>
+
+  <div class="col-md-6">
+    <!-- Plant Status -->
+    <div class="mt-10 ml-52 items-center">
+      <button *ngIf="isPlantsAreDry" (click)="runServo()" class="mt-10 items-center inline-flex bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base">
+        Water the plants 🌱
+      </button>
+      {{plantStatus}}
+    </div>
+
+    <div class="">
+      <p class="mt-2 ml-52 items-center" *ngIf="receivedData.humidtyIndoor !== ''">Humidity on Air {{receivedData.humidtyIndoor}}%</p>
+      <p class="mt-2 ml-52 items-center" *ngIf="receivedData.rainStatus === 'rain'">{{rainStatus}}</p>
+    </div>
+  </div>
+</div>
