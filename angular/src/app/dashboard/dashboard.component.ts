@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
     this.chart.render();
 
     this.socketService.data$.subscribe((data) => {
-      if (data.temperature === '') {
+      if (data === '') {
         this.connectionLost = true;
       } else {
         this.connectionLost = false;
