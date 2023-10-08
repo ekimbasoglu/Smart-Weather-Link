@@ -20,28 +20,10 @@ export class SocketService {
     this.getData();
   }
   getData(): void {
-    this.socket.on('temperature', (data: any) => {
+    this.socket.on('data', (data: any) => {
       this.dataSubject.next({
         ...this.dataSubject.value, // Preserve the current values of other properties
-        temperature: data, // Update only the 'temperature' property
-      });
-    });
-    this.socket.on('humidtyIndoor', (data: any) => {
-      this.dataSubject.next({
-        ...this.dataSubject.value, // Preserve the current values of other properties
-        humidtyIndoor: data, // Update only the 'humidtyIndoor' property
-      });
-    });
-    this.socket.on('humidtyPlant', (data: any) => {
-      this.dataSubject.next({
-        ...this.dataSubject.value, // Preserve the current values of other properties
-        humidtyPlant: data, // Update only the 'humidtyPlant' property
-      });
-    });
-    this.socket.on('rainStatus', (data: any) => {
-      this.dataSubject.next({
-        ...this.dataSubject.value, // Preserve the current values of other properties
-        rainStatus: data, // Update only the 'humidtyPlant' property
+        ...data, // Update only the 'temperature' property
       });
     });
   }
